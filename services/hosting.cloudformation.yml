@@ -1,0 +1,110 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  CertificateArn:
+    AllowedValues:
+      - arn:aws:acm:us-east-1:435765244332:certificate/779f6a51-049f-466c-9a86-960e21c0453b
+      - TODO
+    Type: String
+  CloudFrontHostedZoneId:
+    Default: Z2FDTNDATAQYW2
+    Type: String
+  HostedZone:
+    AllowedValues:
+      - gracemedicalvillagedev.com
+      - gracemedicalvillage.com
+    Type: String
+
+Resources:
+  S3BucketForWebsite:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicRead
+      BucketName: !Ref HostedZone
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+    DeletionPolicy: Retain
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref HostedZone
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: PublicReadForGetBucketObjects
+            Effect: Allow
+            Principal: '*'
+            Action: 's3:GetObject'
+            Resource: !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref HostedZone
+                - /*
+  S3WWWBucketForWebsite:
+    Type: AWS::S3::Bucket
+    DependsOn:
+      - S3BucketForWebsite
+    Properties:
+      AccessControl: BucketOwnerFullControl
+      BucketName: !Sub www.${HostedZone}
+      WebsiteConfiguration:
+        RedirectAllRequestsTo:
+          HostName: !Ref S3BucketForWebsite
+  CloudfrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    DependsOn:
+      - S3WWWBucketForWebsite
+    Properties:
+      DistributionConfig:
+        Aliases:
+          - !Ref HostedZone
+          - !Sub www.${HostedZone}
+        Comment: !Sub CDN for ${HostedZone}
+        DefaultRootObject: index.html
+        Enabled: true
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+            - OPTIONS
+          ForwardedValues:
+            QueryString: true
+            Cookies:
+              Forward: none
+          TargetOriginId: !Ref HostedZone
+          ViewerProtocolPolicy: redirect-to-https
+        Origins:
+          - CustomOriginConfig:
+              HTTPSPort: 443
+              OriginProtocolPolicy: https-only
+            DomainName: !Sub ${HostedZone}.s3.amazonaws.com
+            Id: !Ref HostedZone
+        PriceClass: PriceClass_100
+        ViewerCertificate:
+          AcmCertificateArn: !Ref CertificateArn
+          MinimumProtocolVersion: TLSv1.2_2018
+          SslSupportMethod: sni-only
+  WebsiteDNSName:
+    Type: AWS::Route53::RecordSetGroup
+    DependsOn:
+      - CloudfrontDistribution
+    Properties:
+      HostedZoneName: !Sub ${HostedZone}.
+      RecordSets:
+        - Name: !Ref HostedZone
+          Type: A
+          AliasTarget:
+            DNSName: !GetAtt [CloudfrontDistribution, DomainName]
+            EvaluateTargetHealth: false
+            HostedZoneId: !Ref CloudFrontHostedZoneId
+        - Name: !Sub www.${HostedZone}
+          Type: A
+          AliasTarget:
+            DNSName: !GetAtt [CloudfrontDistribution, DomainName]
+            EvaluateTargetHealth: false
+            HostedZoneId: !Ref CloudFrontHostedZoneId
+
+Outputs:
+  CloudfrontDistribution:
+    Value: !Ref CloudfrontDistribution

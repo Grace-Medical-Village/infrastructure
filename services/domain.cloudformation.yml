@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Creates an Amazon Route 53 hosted zone
+Parameters:
+  DomainName:
+    Type: String
+    AllowedValues:
+      - gracemedicalvillagedev.com
+      - gracemedicalvillage.com
+
+Resources:
+  Domain:
+    Type: AWS::Route53::HostedZone
+    Properties:
+      HostedZoneConfig:
+        Comment: !Sub 'Hosted zone for ${DomainName}'
+      Name: !Ref DomainName
+  SslCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Ref DomainName
+      SubjectAlternativeNames:
+        - !Sub '*.${DomainName}'
+      ValidationMethod: DNS
+
+Outputs:
+  DomainName:
+    Value: !Ref Domain
+  SslCertificate:
+    Value: !Ref SslCertificate
