@@ -1,0 +1,78 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  ClientWebsite:
+    AllowedValues:
+      - https://gracemedicalvillagedev.com
+      - https://gracemedicalvillage.com
+    Type: String
+
+  Env:
+    AllowedValues:
+      - dev
+      - prod
+    Type: String
+
+  Environment:
+    AllowedValues:
+      - development
+      - production
+    Type: String
+
+  ProjectName:
+    Default: GraceMedicalVillage
+    Type: String
+
+  ShortName:
+    Default: gmv
+    Type: String
+
+Resources:
+  UserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          - Name: admin_only
+            Priority: 1
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: false
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+          RequireUppercase: true
+          TemporaryPasswordValidityDays: 7
+      UsernameConfiguration:
+        CaseSensitive: false
+      UserPoolName: !Sub ${ShortName}-user-pool
+
+  UserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      ClientName: !Sub ${ShortName}-user-pool-client
+      ExplicitAuthFlows:
+        - ALLOW_ADMIN_USER_PASSWORD_AUTH
+        - ALLOW_CUSTOM_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+        - ALLOW_USER_SRP_AUTH
+      GenerateSecret: false
+      PreventUserExistenceErrors: ENABLED
+      RefreshTokenValidity: 30
+      SupportedIdentityProviders:
+        - COGNITO
+      UserPoolId: !Ref UserPool
+
+  UserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      Domain: !Sub ${ShortName}-auth-${Env}
+      UserPoolId: !Ref UserPool
+
+Outputs:
+  UserPool:
+    Value: !Ref UserPool
+  UserPoolClient:
+    Value: !Ref UserPoolClient

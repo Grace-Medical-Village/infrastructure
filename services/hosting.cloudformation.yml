@@ -51,6 +51,7 @@ Resources:
       WebsiteConfiguration:
         RedirectAllRequestsTo:
           HostName: !Ref S3BucketForWebsite
+          Protocol: https
   CloudfrontDistribution:
     Type: AWS::CloudFront::Distribution
     DependsOn:
@@ -108,3 +109,5 @@ Resources:
 Outputs:
   CloudfrontDistribution:
     Value: !Ref CloudfrontDistribution
+  WebsiteDNSName:
+    Value: !Ref WebsiteDNSName

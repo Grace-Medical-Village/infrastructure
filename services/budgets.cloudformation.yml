@@ -9,8 +9,8 @@ Parameters:
 
   Environment:
     AllowedValues:
-      - Development
-      - Production
+      - development
+      - production
     Type: String
 
   ProjectName:

@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  ApiCertificateArn:
+    AllowedValues:
+      - arn:aws:acm:us-east-1:435765244332:certificate/779f6a51-049f-466c-9a86-960e21c0453b
+      - TODO
+    Type: String
+  DomainName:
+    AllowedValues:
+      - gracemedicalvillagedev.com
+      - gracemedicalvillage.com
+    Type: String
+
+Resources:
+  ApiDomain:
+    Type: AWS::ApiGateway::DomainName
+    Properties:
+      CertificateArn: !Ref ApiCertificateArn
+      DomainName: !Sub 'api.${DomainName}'
+      SecurityPolicy: TLS_1_2
+
+Outputs:
+  ApiDomain:
+    Value: !Ref ApiDomain

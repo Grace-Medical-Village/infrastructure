@@ -2,10 +2,15 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: Creates an Amazon Route 53 hosted zone
 Parameters:
   DomainName:
-    Type: String
     AllowedValues:
       - gracemedicalvillagedev.com
       - gracemedicalvillage.com
+    Type: String
+  HostedZoneId:
+    AllowedValues:
+      - Z03413242K12VXBMESSYC
+      - Z06243561BJW62E9DPALB
+    Type: String
 
 Resources:
   Domain:
@@ -17,7 +22,11 @@ Resources:
   SslCertificate:
     Type: AWS::CertificateManager::Certificate
     Properties:
+      CertificateTransparencyLoggingPreference: DISABLED
       DomainName: !Ref DomainName
+      DomainValidationOptions:
+        - DomainName: !Ref DomainName
+          HostedZoneId: !Ref HostedZoneId
       SubjectAlternativeNames:
         - !Sub '*.${DomainName}'
       ValidationMethod: DNS
