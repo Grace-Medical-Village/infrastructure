@@ -1,0 +1,42 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  Environment:
+    AllowedValues:
+      - development
+      - production
+    Type: String
+
+  MasterUsername:
+    NoEcho: true
+    Type: String
+
+  MasterUserPassword:
+    NoEcho: true
+    Type: String
+
+Mappings:
+  Environment:
+    development:
+      secondsUntilAutoPause: 300
+    production:
+      secondsUntilAutoPause: 900
+
+Resources:
+  RDSCluster:
+    Type: AWS::RDS::DBCluster
+    Properties:
+      DatabaseName: gmvc
+      EnableHttpEndpoint: true
+      Engine: aurora-postgresql
+      EngineMode: serverless
+      MasterUserPassword: !Ref MasterUserPassword
+      MasterUsername: !Ref MasterUsername
+      Port: 5432
+      ScalingConfiguration:
+        AutoPause: true
+        MaxCapacity: 8
+        MinCapacity: 2
+        SecondsUntilAutoPause:
+          !FindInMap [Environment, !Ref Environment, secondsUntilAutoPause]
+      SourceRegion: us-east-1

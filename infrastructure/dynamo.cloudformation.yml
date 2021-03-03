@@ -1,6 +1,10 @@
 AWSTemplateFormatVersion: 2010-09-09
 
 Parameters:
+  GlobalSecondaryIndexBirthdate:
+    Default: patient-birthdate
+    Type: String
+
   Environment:
     AllowedValues:
       - development
@@ -15,32 +19,16 @@ Conditions:
   DevResource: !Equals [!Ref Environment, development]
   ProdResource: !Equals [!Ref Environment, production]
 
-Resources:
-  PatientsTableDev:
-    Type: AWS::DynamoDB::Table
-    Condition: DevResource
-    Properties:
-      AttributeDefinitions:
-        - AttributeName: id
-          AttributeType: S
-        - AttributeName: key
-          AttributeType: S
-      KeySchema:
-        - AttributeName: id
-          KeyType: HASH
-        - AttributeName: key
-          KeyType: RANGE
-      PointInTimeRecoverySpecification:
-        PointInTimeRecoveryEnabled: false
-      ProvisionedThroughput:
-        ReadCapacityUnits: 5
-        WriteCapacityUnits: 5
-      TableName: !Ref PatientsTableName
-    DeletionPolicy: Retain
+Mappings:
+  Environment:
+    development:
+      pointInTimeRecovery: false
+    production:
+      pointInTimeRecovery: true
 
-  PatientsTableProd:
+Resources:
+  PatientsTable:
     Type: AWS::DynamoDB::Table
-    Condition: ProdResource
     Properties:
       AttributeDefinitions:
         - AttributeName: id
@@ -53,7 +41,8 @@ Resources:
         - AttributeName: key
           KeyType: RANGE
       PointInTimeRecoverySpecification:
-        PointInTimeRecoveryEnabled: true
+        PointInTimeRecoveryEnabled:
+          !FindInMap [Environment, !Ref Environment, pointInTimeRecovery]
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5

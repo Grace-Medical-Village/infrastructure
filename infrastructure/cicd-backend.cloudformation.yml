@@ -11,13 +11,13 @@ Parameters:
 
   githubBranch:
     AllowedValues:
-      - master
-      - production
+      - deploy-dev
+      - deploy-prod
     Type: String
-    Description: The branch of the repo to continuously deploy. (dev)
+    Description: The branch of the repo to continuously deploy.
 
   githubRepo:
-    Default: gmv-patient-api
+    Default: backend
     Type: String
 
   githubToken:
@@ -29,15 +29,13 @@ Parameters:
     Type: String
 
   resourcePrefix:
-    AllowedValues:
-      - gmv-dev-patient-api
-      - gmv-prod-patient-api
+    Default: gmvc-backend
     Type: String
 
   s3PipelineBucket:
     AllowedValues:
-      - gmv-patient-api-pipeline-dev
-      - gmv-patient-api-pipeline
+      - gmvc-backend-cicd-dev
+      - gmvc-backend-cicd
     Type: String
 
   s3SourceBucket:

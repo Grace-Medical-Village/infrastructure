@@ -18,13 +18,13 @@ Parameters:
 
   githubBranch:
     AllowedValues:
-      - master
-      - production
+      - deploy-dev
+      - deploy-prod
     Type: String
     Description: The branch of the repo to continuously deploy. (dev)
 
   githubRepo:
-    Default: gmv-frontend
+    Default: client
     Type: String
 
   githubToken:
@@ -36,15 +36,13 @@ Parameters:
     Type: String
 
   resourcePrefix:
-    AllowedValues:
-      - gmv-dev
-      - gmv-prod
+    Default: client
     Type: String
 
   s3PipelineBucket:
     AllowedValues:
-      - gmvdev-client-pipeline
-      - gmv-client-pipeline
+      - gmvc-client-cicd-dev
+      - gmvc-client-cicd
     Type: String
 
   s3SourceBucket:
