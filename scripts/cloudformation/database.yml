@@ -27,6 +27,7 @@ Resources:
     Type: AWS::RDS::DBCluster
     Properties:
       DatabaseName: gmvc
+      DeletionProtection: true
       EnableHttpEndpoint: true
       Engine: aurora-postgresql
       EngineMode: serverless

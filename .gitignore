@@ -1,4 +1,4 @@
 .vscode
 archive
-scripts/variables.txt
 **/*.run.sh
+scripts/variables.txt

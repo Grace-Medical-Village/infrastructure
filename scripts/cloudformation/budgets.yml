@@ -3,8 +3,8 @@ AWSTemplateFormatVersion: '2010-09-09'
 Parameters:
   ContactEmail:
     AllowedValues:
-      - brettbotto+gmvdev@gmail.com
-      - brettbotto+gmvprod@gmail.com
+      - brettbotto+gmvcdev@gmail.com
+      - brettbotto+gmvcprod@gmail.com
     Type: String
 
   Environment:
@@ -14,7 +14,7 @@ Parameters:
     Type: String
 
   ProjectName:
-    Default: GraceMedicalVillage
+    Default: GMVC
     Type: String
 
 Resources:
