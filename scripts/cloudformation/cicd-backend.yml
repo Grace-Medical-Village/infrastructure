@@ -102,7 +102,7 @@ Resources:
           - Name: ENVIRONMENT
             Type: PLAINTEXT
             Value: !Ref environment
-        Image: aws/codebuild/standard:4.0
+        Image: aws/codebuild/standard:5.0
         Type: LINUX_CONTAINER
         PrivilegedMode: false
       Name: !Sub ${resourcePrefix}-build
@@ -250,6 +250,8 @@ Resources:
               - logs:GetLogEvents
               - logs:PutLogEvents
               - logs:PutSubscriptionFilter
+              - route53:ChangeResourceRecordSets
+              - route53:ListHostedZones
               - s3:CreateBucket
               - s3:DeleteBucket
               - s3:DeleteBucketPolicy

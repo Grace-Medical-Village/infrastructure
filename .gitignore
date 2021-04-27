@@ -2,3 +2,4 @@
 archive
 **/*.run.sh
 scripts/variables.txt
+scripts/auth/*
