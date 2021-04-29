@@ -241,15 +241,7 @@ Resources:
               - kinesis:DeleteStream
               - kinesis:DescribeStream
               - lambda:*
-              - logs:CreateLogGroup
-              - logs:CreateLogStream
-              - logs:DeleteLogGroup
-              - logs:DescribeLogGroups
-              - logs:DescribeLogStreams
-              - logs:FilterLogEvents
-              - logs:GetLogEvents
-              - logs:PutLogEvents
-              - logs:PutSubscriptionFilter
+              - logs:*
               - route53:ChangeResourceRecordSets
               - route53:ListHostedZones
               - s3:CreateBucket
