@@ -42,7 +42,7 @@ Parameters:
   s3SourceBucket:
     AllowedValues:
       - patient-api-development-serverlessdeploymentbucke-zqef1ecxvht8
-      - TODO
+      - TODO # todo
     Type: String
 
 Resources:

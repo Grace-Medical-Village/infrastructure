@@ -4,11 +4,15 @@ Parameters:
   CertificateArn:
     AllowedValues:
       - arn:aws:acm:us-east-1:435765244332:certificate/779f6a51-049f-466c-9a86-960e21c0453b
-      - TODO
+      - arn:aws:acm:us-east-1:403617656420:certificate/c63545fa-8d30-4023-aa23-68bf5f4ba62f
     Type: String
+
   CloudFrontHostedZoneId:
-    Default: Z2FDTNDATAQYW2
+    AllowedValues:
+      - Z03413242K12VXBMESSYC
+      - Z06243561BJW62E9DPALB
     Type: String
+
   HostedZone:
     AllowedValues:
       - gracemedicalvillagedev.com
@@ -23,7 +27,7 @@ Resources:
       BucketName: !Ref HostedZone
       WebsiteConfiguration:
         IndexDocument: index.html
-        ErrorDocument: error.html
+        ErrorDocument: index.html
     DeletionPolicy: Retain
   BucketPolicy:
     Type: AWS::S3::BucketPolicy
