@@ -41,8 +41,8 @@ Parameters:
 
   s3SourceBucket:
     AllowedValues:
-      - patient-api-development-serverlessdeploymentbucke-zqef1ecxvht8
-      - TODO # todo
+      - patient-api-development-serverlessdeploymentbucke-zqef1ecxvht8 # todo
+      - backend-production-serverlessdeploymentbucket-14ljucsjawjyn
     Type: String
 
 Resources:
@@ -148,7 +148,6 @@ Resources:
               OutputArtifacts:
                 - Name: BuildOutput
               RunOrder: 2
-              
 
   ServerlessCodeBuildRole:
     Type: AWS::IAM::Role

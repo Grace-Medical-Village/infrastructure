@@ -5,7 +5,7 @@ Parameters:
   distributionId:
     AllowedValues:
       - E220JCUPR3SPWA
-      - PROD
+      - E1R8RN9OT35TWL
     Description: CloudFront distribution ID
     Type: String
 

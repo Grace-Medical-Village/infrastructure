@@ -4,13 +4,11 @@ Parameters:
   CertificateArn:
     AllowedValues:
       - arn:aws:acm:us-east-1:435765244332:certificate/779f6a51-049f-466c-9a86-960e21c0453b
-      - arn:aws:acm:us-east-1:403617656420:certificate/c63545fa-8d30-4023-aa23-68bf5f4ba62f
+      - arn:aws:acm:us-east-1:403617656420:certificate/9be3983e-5fe9-4d22-9c44-cf15fdee6795
     Type: String
 
   CloudFrontHostedZoneId:
-    AllowedValues:
-      - Z03413242K12VXBMESSYC
-      - Z06243561BJW62E9DPALB
+    Default: Z2FDTNDATAQYW2
     Type: String
 
   HostedZone:
@@ -83,12 +81,12 @@ Resources:
           - CustomOriginConfig:
               HTTPSPort: 443
               OriginProtocolPolicy: https-only
-            DomainName: !Sub ${HostedZone}.s3.amazonaws.com
+            DomainName: !Sub ${HostedZone}.s3.us-east-1.amazonaws.com
             Id: !Ref HostedZone
         PriceClass: PriceClass_100
         ViewerCertificate:
           AcmCertificateArn: !Ref CertificateArn
-          MinimumProtocolVersion: TLSv1.2_2018
+          MinimumProtocolVersion: TLSv1.2_2021
           SslSupportMethod: sni-only
   WebsiteDNSName:
     Type: AWS::Route53::RecordSetGroup
